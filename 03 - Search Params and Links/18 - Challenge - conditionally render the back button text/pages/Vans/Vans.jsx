@@ -13,25 +13,9 @@ export default function Vans() {
             .then(data => setVans(data.vans))
     }, [])
 
-    const displayedVans = typeFilter
+    const displayedVans = React.useMemo(() =>  typeFilter
         ? vans.filter(van => van.type === typeFilter)
-        : vans
-
-    const vanElements = displayedVans.map(van => (
-        <div key={van.id} className="van-tile">
-            <Link 
-                to={van.id} 
-                state={{ search: `?${searchParams.toString()}` }}
-            >
-                <img src={van.imageUrl} />
-                <div className="van-info">
-                    <h3>{van.name}</h3>
-                    <p>${van.price}<span>/day</span></p>
-                </div>
-                <i className={`van-type ${van.type} selected`}>{van.type}</i>
-            </Link>
-        </div>
-    ))
+        : vans, [vans, typeFilter])   
 
     function handleFilterChange(key, value) {
         setSearchParams(prevParams => {
@@ -74,12 +58,26 @@ export default function Vans() {
                     <button
                         onClick={() => handleFilterChange("type", null)}
                         className="van-type clear-filters"
-                    >Clear filter</button>
+                    >查看全部</button>
                 ) : null}
 
             </div>
             <div className="van-list">
-                {vanElements}
+                {displayedVans.map(van => (
+                    <div key={van.id} className="van-tile">
+                        <Link 
+                            to={van.id} 
+                            state={{ search: `?${searchParams.toString()}` }}
+                        >
+                            <img src={van.imageUrl} />
+                            <div className="van-info">
+                                <h3>{van.name}</h3>
+                                <p>${van.price}<span>/day</span></p>
+                            </div>
+                            <i className={`van-type ${van.type} selected`}>{van.type}</i>
+                        </Link>
+                    </div>
+                ))}
             </div>
         </div>
     )

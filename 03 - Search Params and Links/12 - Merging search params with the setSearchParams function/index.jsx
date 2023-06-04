@@ -43,13 +43,15 @@ function HomePage() {
   return (
     <main>
       <h2>Home</h2>
+      <pre>{searchParams.toString()}</pre>
       <div>
         <Link to={genNewSearchParamString("type", "jedi")}>Jedi</Link>
         <Link to={genNewSearchParamString("type", "sith")}>Sith</Link>
         <Link to={genNewSearchParamString("type", null)}>Clear</Link>
       </div>
       <div>
-        <button onClick={() => setSearchParams({ type: "jedi" })}>Jedi</button>
+        <button onClick={() => setSearchParams({ a: "b", c: true })}>Mess</button>
+        <button onClick={() => setSearchParams((p) => { p.set("type", "jedi"); return p } )}>Jedi</button>
         <button onClick={() => setSearchParams({ type: "sith" })}>Sith</button>
         <button onClick={() => setSearchParams({})}>Clear</button>
       </div>
@@ -63,7 +65,7 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/characters" element={<HomePage />} />
+        <Route path="/" element={<HomePage />} />        
       </Routes>
     </BrowserRouter>
   )
