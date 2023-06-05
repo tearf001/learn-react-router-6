@@ -1,5 +1,5 @@
-import React from "react"
-import { Link, useLoaderData } from "react-router-dom"
+import React, { Suspense } from "react"
+import { Link, useLoaderData, Await, defer } from "react-router-dom"
 import { getHostVans } from "../../api"
 import { requireAuth } from "../../utils"
 
@@ -8,15 +8,16 @@ import { requireAuth } from "../../utils"
  * /host/vans route.
  */
 
-export async function loader({ request }) {
-    await requireAuth(request)
-    return getHostVans()
+export function loader({ request }) {
+    // await requireAuth({request})
+    return defer({vans: getHostVans()})
 }
 
 export default function HostVans() {
-    const vans = useLoaderData()
+    const vansDeferred = useLoaderData()
+    console.log('vansDeferred in host', vansDeferred)
 
-    const hostVansEls = vans.map(van => (
+    const hostVansEls = vans => vans.map(van => (
         <Link
             to={van.id}
             key={van.id}
@@ -37,7 +38,11 @@ export default function HostVans() {
             <h1 className="host-vans-title">Your listed vans</h1>
             <div className="host-vans-list">
                 <section>
-                    {hostVansEls}
+                    <Suspense fallback="loading..."> 
+                        <Await resolve={vansDeferred.vans}>
+                            {hostVansEls}
+                        </Await>
+                    </Suspense>
                 </section>
             </div>
         </section>

@@ -6,5 +6,6 @@ export default function AuthRequired() {
     // If the user is not logged in
         // Redirect them to the /login route
     // Otherwise:
-    return <Outlet />
+    if(Math.random()>.5)
+        return <Outlet />
 }

@@ -25,6 +25,7 @@ const router = createBrowserRouter(createRoutesFromElements(
       element={<h1>Super secret info here</h1>}
       loader={async () => {
         const isLoggedIn = false
+        console.log('load anyway!')
         if(!isLoggedIn) {
           throw redirect("/login")
         }

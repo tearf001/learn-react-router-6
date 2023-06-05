@@ -22,7 +22,9 @@ export async function action({ request }) {
     const password = formData.get("password")
     try {
         const user = await fakeLoginUser({ email, password })
-        return redirect("/protected")
+        const fuck = redirect("/protected")
+        console.log('fuck', fuck)
+        return fuck; // 重定向后, 路由组件发生变化, action对应的组件(<Login/>) 会渲染,但 useActionData() 不会获得数据
     } catch (err) {
         return err.message
     }
@@ -30,6 +32,8 @@ export async function action({ request }) {
 
 export default function Login() {
     const errorMessage = useActionData()
+    console.log('fuck errorMessage', errorMessage)
+
     return (
         <Form method="post" replace>
             <h2>Login</h2>

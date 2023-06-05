@@ -1,7 +1,7 @@
 import React from "react"
 import {
     useLoaderData,
-    useNavigate,
+    useNavigation,
     Form,
     redirect,
     useActionData
@@ -27,6 +27,7 @@ export async function action({ request }) {
         localStorage.setItem("loggedin", true)
         return redirect("/host")
     } catch(err) {
+        console.log('errr', err)
         return err.message
     }
 }
@@ -41,21 +42,10 @@ export async function action({ request }) {
  */
 
 export default function Login() {
-    const [status, setStatus] = React.useState("idle")
     const errorMessage = useActionData()
     const message = useLoaderData()
-    const navigate = useNavigate()
-
-    function handleSubmit(e) {
-        e.preventDefault()
-        setStatus("submitting")
-        loginUser(loginFormData)
-            .then(data => {
-                navigate("/host", { replace: true })
-            })
-            .finally(() => setStatus("idle"))
-    }
-
+    const nav = useNavigation()
+    console.log('nav', nav)
     return (
         <div className="login-container">
             <h1>Sign in to your account</h1>
@@ -77,10 +67,11 @@ export default function Login() {
                     type="password"
                     placeholder="Password"
                 />
+                {nav.state === "loading" && <hr/> }
                 <button
-                    disabled={status === "submitting"}
+                    disabled={nav.state === "submitting"}
                 >
-                    {status === "submitting"
+                    {nav.state === "submitting"
                         ? "Logging in..."
                         : "Log in"
                     }

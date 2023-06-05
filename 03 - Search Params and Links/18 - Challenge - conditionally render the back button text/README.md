@@ -21,3 +21,36 @@ The Frontend Developer Career Path aims to teach you everything you need to beco
 - [Become a Scrimba Pro member](https://scrimba.com/pricing)
 
 Happy Coding!
+
+keynote
+## Vans 
+### Part1. 标头部分
+功能: filter列表
+当点击filterTag的时候, 处理:
+- 修改URL.
+- 获得焦点classname
+```jsx
+<button
+    onClick={() => handleFilterChange("type", "simple")}
+    className={
+        `van-type simple 
+        ${typeFilter === "simple" ? "selected" : ""}`
+    }
+>Simple</button>
+```
+### Part2. 列表部分
+当点击某项时:
+- 进入详情页.保存搜索状态, 但不在url中显示(显得冗余). 因此用state
+- 当从详情页重新回到这个列表时, 其搜索参数仍然保持, ~~从state中读取, 造成复杂和用户困扰~~
+- ~~还可以携带 Record. 但这个不推荐. 应重新加载~~
+```jsx
+<Link to={van.id} state={{ search: `?${searchParams.toString()}`, currentVan: van }} > 
+    ... 内容 ... 
+</Link>
+```
+## VanDetail
+- 返回列表
+  使用 state 中的`search`(此时, URL中并不包含搜索)  
+- 详情加载:
+  - 重新加载(从数据库中重获)
+  - 使用state中携带的..Record. 如果是Outlet中显示详情, 则可以通过`useOuletContext()`
